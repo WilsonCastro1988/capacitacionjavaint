@@ -15,6 +15,8 @@ import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.sql.DataSource;
@@ -23,41 +25,34 @@ import javax.sql.DataSource;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class DaoGenericoImplement<E> implements DaoGenerico<E> {
 
-    @PersistenceContext(unitName = "factor2fa-PU")
-    private EntityManager entityManager;
+    //@PersistenceContext(unitName = "factor2fa-PU")
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("factor2fa-PU");
 
-    @Resource(mappedName = "java:/FirmesaDS")
-    private DataSource dataSource;
-
-    @Resource
-    private SessionContext sessionContext;
-
+   
     public EntityManager getEntityManager() {
-        return entityManager;
+        return emf.createEntityManager();
     }
 
-    public DataSource getDataSource() {
-        return dataSource;
-    }
+   
 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void save(E objeto) throws Exception {
 
-        entityManager.persist(objeto);
+        getEntityManager().persist(objeto);
     }
 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void update(E objeto) throws Exception {
-        entityManager.merge(objeto);
+        getEntityManager().merge(objeto);
     }
 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void delete(E objeto) throws Exception {
         // TODO Auto-generated method stub
-        entityManager.remove(entityManager.merge(objeto));
+        getEntityManager().remove(getEntityManager().merge(objeto));
 
     }
 
@@ -65,13 +60,13 @@ public class DaoGenericoImplement<E> implements DaoGenerico<E> {
     @Override
     public List<E> getAll(Class<E> classe) throws Exception {
         // TODO Auto-generated method stub
-        return entityManager.createQuery(" select o from " + classe.getSimpleName() + " o ").getResultList();
+        return getEntityManager().createQuery(" select o from " + classe.getSimpleName() + " o ").getResultList();
     }
 
     @Override
     public Object getById(Class<E> classe, Object pk) {
         try {
-            return entityManager.find(classe, pk);
+            return getEntityManager().find(classe, pk);
         } catch (Exception exception) {
             return null;
         }

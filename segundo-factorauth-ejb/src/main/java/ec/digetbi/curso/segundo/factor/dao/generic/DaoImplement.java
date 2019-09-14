@@ -20,6 +20,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.sql.DataSource;
@@ -32,17 +33,17 @@ import javax.sql.DataSource;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class DaoImplement<E> implements DaoGenerico<E> {
 
-    @PersistenceContext(unitName = "factor2fa-PU")
-    private EntityManager entityManager;
+    //@PersistenceContext(unitName = "factor2fa-PU")
+    private EntityManager entityManager = Persistence.createEntityManagerFactory("factor2fa-PU").createEntityManager();
 
     public EntityManager getEntityManager() {
         return entityManager;
     }
 
     @Override
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void save(E objeto) throws Exception {
         entityManager.persist(objeto);
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

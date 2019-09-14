@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")
-    , @NamedQuery(name = "Usuario.findByIdUser", query = "SELECT u FROM Usuario u WHERE u.idUser = :idUser and :")
+    , @NamedQuery(name = "Usuario.findByIdUser", query = "SELECT u FROM Usuario u WHERE u.idUser = :idUser")
     , @NamedQuery(name = "Usuario.findByNameUser", query = "SELECT u FROM Usuario u WHERE u.nameUser = :nameUser")
     , @NamedQuery(name = "Usuario.findByNicknameUser", query = "SELECT u FROM Usuario u WHERE u.nicknameUser = :nicknameUser")
     , @NamedQuery(name = "Usuario.findByEmailUser", query = "SELECT u FROM Usuario u WHERE u.emailUser = :emailUser")
@@ -138,5 +138,5 @@ public class Usuario implements Serializable {
     public String toString() {
         return "ec.digetbi.curso.segundo.factorauth.entities.Usuario[ idUser=" + idUser + " ]";
     }
-    
+
 }

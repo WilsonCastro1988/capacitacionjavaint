@@ -7,11 +7,18 @@ package ec.digetbi.curso.segundo.factorauth.dao;
 
 import ec.digetbi.curso.segundo.factor.dao.generic.DaoGenerico;
 import ec.digetbi.curso.segundo.factorauth.entities.Usuario;
+import java.util.List;
+import javax.ejb.Local;
 
 /**
  *
  * @author Wilson Castro
  */
-public interface UsuarioDAO extends DaoGenerico<Usuario>{
-    
+@Local
+public interface UsuarioDAO extends DaoGenerico<Usuario> {
+
+    public List<Usuario> findAllUsuarios();
+
+    public boolean verificarUsuario1fa(String nickName, String password);
+
 }
