@@ -15,7 +15,6 @@ import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -25,34 +24,39 @@ import javax.sql.DataSource;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class DaoGenericoImplement<E> implements DaoGenerico<E> {
 
-    //@PersistenceContext(unitName = "factor2fa-PU")
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("factor2fa-PU");
+    //@PersistenceContext(unitName = "factorAutenticacion-PU")
+    private EntityManager entityManager = Persistence.createEntityManagerFactory("factorAutenticacion-PU").createEntityManager();
 
-   
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return entityManager;
     }
-
-   
 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void save(E objeto) throws Exception {
+        entityManager.getTransaction().begin();
+        entityManager.persist(objeto);
+        entityManager.getTransaction().commit();
+        entityManager.close();
 
-        getEntityManager().persist(objeto);
     }
 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void update(E objeto) throws Exception {
-        getEntityManager().merge(objeto);
+        entityManager.getTransaction().begin();
+        entityManager.merge(objeto);
+        entityManager.getTransaction().commit();
+
     }
 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void delete(E objeto) throws Exception {
-        // TODO Auto-generated method stub
-        getEntityManager().remove(getEntityManager().merge(objeto));
+        entityManager.getTransaction().begin();
+        entityManager.remove(entityManager.merge(objeto));
+        entityManager.getTransaction().commit();
+        entityManager.close();
 
     }
 
@@ -60,13 +64,13 @@ public class DaoGenericoImplement<E> implements DaoGenerico<E> {
     @Override
     public List<E> getAll(Class<E> classe) throws Exception {
         // TODO Auto-generated method stub
-        return getEntityManager().createQuery(" select o from " + classe.getSimpleName() + " o ").getResultList();
+        return entityManager.createQuery(" select o from " + classe.getSimpleName() + " o ").getResultList();
     }
 
     @Override
     public Object getById(Class<E> classe, Object pk) {
         try {
-            return getEntityManager().find(classe, pk);
+            return entityManager.find(classe, pk);
         } catch (Exception exception) {
             return null;
         }

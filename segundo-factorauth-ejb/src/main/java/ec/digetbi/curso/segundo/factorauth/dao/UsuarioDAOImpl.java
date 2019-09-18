@@ -5,7 +5,7 @@
  */
 package ec.digetbi.curso.segundo.factorauth.dao;
 
-import ec.digetbi.curso.segundo.factor.dao.generic.DaoImplement;
+import ec.digetbi.curso.segundo.factor.dao.generic.DaoGenericoImplement;
 import ec.digetbi.curso.segundo.factorauth.entities.Usuario;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -18,7 +18,7 @@ import org.apache.commons.codec.digest.DigestUtils;
  * @author Wilson Castro
  */
 @Stateless
-public class UsuarioDAOImpl extends DaoImplement<Usuario> implements UsuarioDAO{
+public class UsuarioDAOImpl extends DaoGenericoImplement<Usuario> implements UsuarioDAO {
 
     @Override
     public List<Usuario> findAllUsuarios() {
@@ -49,5 +49,24 @@ public class UsuarioDAOImpl extends DaoImplement<Usuario> implements UsuarioDAO{
             return false;
         }
 
+    }
+
+    @Override
+    public Usuario findByNickNamePass(String nickName, String password) {
+        try {
+            StringBuilder query = new StringBuilder("select u from Usuario u where "
+                    + "u.nicknameUser = ?1 and u.passUser = ?2");
+            Query consulta = getEntityManager().createQuery(query.toString());
+            consulta.setParameter(1, nickName);
+            consulta.setParameter(2, DigestUtils.md5Hex(password));
+
+            Usuario user = (Usuario) consulta.getSingleResult();
+
+
+            return user;
+
+        } catch (EntityNotFoundException e) {
+            return null;
+        }
     }
 }

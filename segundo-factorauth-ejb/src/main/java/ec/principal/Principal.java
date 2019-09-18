@@ -9,7 +9,6 @@ import ec.digetbi.curso.segundo.factorauth.dao.UsuarioDAO;
 import ec.digetbi.curso.segundo.factorauth.dao.UsuarioDAOImpl;
 import ec.digetbi.curso.segundo.factorauth.entities.Usuario;
 import javax.ejb.EJB;
-import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  *
@@ -28,8 +27,9 @@ public class Principal {
 
         boolean valor = userDaoImpl.verificarUsuario1fa("wilson", "wilson");
 
-        System.out.println("VALOR: " + valor);
+        usuario = (Usuario) userDaoImpl.getById(Usuario.class, 1);
 
+        System.out.println("DATOS: " + usuario.getEmailUser());
     }
 
 }

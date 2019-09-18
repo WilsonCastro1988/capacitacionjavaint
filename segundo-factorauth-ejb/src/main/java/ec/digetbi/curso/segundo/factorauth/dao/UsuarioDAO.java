@@ -21,4 +21,6 @@ public interface UsuarioDAO extends DaoGenerico<Usuario> {
 
     public boolean verificarUsuario1fa(String nickName, String password);
 
+    public Usuario findByNickNamePass(String nickName, String password);
+
 }

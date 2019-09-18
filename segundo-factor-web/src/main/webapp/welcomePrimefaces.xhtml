@@ -15,44 +15,59 @@
 
         <h:body>
 
-            <p:layout fullPage="true">
+            <h:form id="form">
+                <p:growl id="mensaje" life="2000" />
 
-                <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
-                    Header
-                </p:layoutUnit>
+                <p:layout fullPage="true">
 
-                <p:layoutUnit position="south" size="100" closable="true" collapsible="true">
-                    Footer
-                </p:layoutUnit>
+                    <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
+                        Header
+                    </p:layoutUnit>
 
-                <p:layoutUnit position="west" size="175" header="Left" collapsible="true">
-                    <p:menu>
-                        <p:submenu label="Resources">
-                            <p:menuitem value="Demo" url="http://www.primefaces.org/showcase-labs/ui/home.jsf" />
-                            <p:menuitem value="Documentation" url="http://www.primefaces.org/documentation.html" />
-                            <p:menuitem value="Forum" url="http://forum.primefaces.org/" />
-                            <p:menuitem value="Themes" url="http://www.primefaces.org/themes.html" />
+                    <p:layoutUnit position="south" size="100" closable="true" collapsible="true">
+                        Footer
+                    </p:layoutUnit>
 
-                        </p:submenu>
+                    <p:layoutUnit position="west" size="175" header="Left" collapsible="true">
+                        <p:menu>
+                            <p:submenu label="Resources">
+                                <p:menuitem value="Demo" url="http://www.primefaces.org/showcase-labs/ui/home.jsf" />
+                                <p:menuitem value="Documentation" url="http://www.primefaces.org/documentation.html" />
+                                <p:menuitem value="Forum" url="http://forum.primefaces.org/" />
+                                <p:menuitem value="Themes" url="http://www.primefaces.org/themes.html" />
 
-                    </p:menu>
-                </p:layoutUnit>
+                            </p:submenu>
 
-                <p:layoutUnit position="center">
-                    Welcome to PrimeFaces
-                    <h:form id="form"> 
-                        <p:growl id="mensaje" life="2000" />
+                        </p:menu>
+                    </p:layoutUnit>
+
+                    <p:layoutUnit position="center">
+                        Welcome to PrimeFaces
+
                         <p:inputText id="inpNombre" placeholder="Ingrese su Nombre..." value="#{loginController.nombreUsuario}"/>
-                        <p:inputText id="inpClave" placeholder="Ingrese su Clave..." value="#{loginController.clave}"/>
+                        <p:password feedback="true" id="inpClave" placeholder="Ingrese su Clave..." value="#{loginController.clave}" />
 
-                        <p:commandButton  update="oupNombre,oupClave, mensaje" process="@this, inpNombre, inpClave" value="Ingresar" actionListener="#{loginController.login}"/>
+                        <p:commandButton  
+                            
+                            update="oupNombre,oupClave, mensaje" 
+                            process="@this, inpNombre, inpClave" 
+                            value="Ingresar" 
+                            actionListener="#{loginController.login}"/>
 
                         <p:outputLabel id="oupNombre" value="USUARIO: #{loginController.nombreUsuario}" />
                         <p:outputLabel id="oupClave" value="CLAVE: #{loginController.clave}" />
-                    </h:form>
-                </p:layoutUnit>
+                    </p:layoutUnit>
 
-            </p:layout>
+                </p:layout>
+
+                <p:dialog widgetVar="pnlgSegunFactor" >
+                    <p:inputText value="#{loginController.codigoEmail}" id="inpCodEemail"/>
+                    <p:commandButton  update="mensaje" 
+                                      process="@this, inpCodEemail" 
+                                      value="Login" 
+                                      actionListener="#{loginController.login}"/>
+                </p:dialog>
+            </h:form>
 
         </h:body>
 
